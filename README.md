@@ -20,9 +20,9 @@ _Segundo paso_
 Correr comando: docker compose up
 ```
 
-## Ejecutando las pruebas ⚙️
+## Capturas del proyecto
 
-_Explica como ejecutar las pruebas automatizadas para este sistema_
+![captura](https://i.ibb.co/H40Xh66/Captura-desde-2022-12-03-12-26-14.png)
 
 
 
