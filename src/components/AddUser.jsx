@@ -26,7 +26,7 @@ export default function AddUser({ onClose, onCloseSubmit, search, searchBy }) {
       })
       .finally(() => setLoading(false))
   }
-  console.log(search, searchBy)
+
   return (
     <div className='w-screen h-screen fixed top-0 left-0 bg-black/50 flex items-center justify-center z-50'>
       {!error ? (
