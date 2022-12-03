@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { createUser } from '../services/api'
 import Loader from './icons/Loader'
 
-export default function AddUser({ onClose, onCloseSubmit }) {
+export default function AddUser({ onClose, onCloseSubmit, search, searchBy }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const {
@@ -26,7 +26,7 @@ export default function AddUser({ onClose, onCloseSubmit }) {
       })
       .finally(() => setLoading(false))
   }
-
+  console.log(search, searchBy)
   return (
     <div className='w-screen h-screen fixed top-0 left-0 bg-black/50 flex items-center justify-center z-50'>
       {!error ? (
@@ -48,6 +48,7 @@ export default function AddUser({ onClose, onCloseSubmit }) {
                 type='text'
                 {...register('nombre', {
                   required: true,
+                  value: searchBy === 'nombre' ? search : '',
                 })}
               ></input>
               {errors.nombre?.type === 'required' && (
@@ -63,6 +64,7 @@ export default function AddUser({ onClose, onCloseSubmit }) {
                 type='text'
                 {...register('razonSocial', {
                   required: true,
+                  value: searchBy === 'razonSocial' ? search : '',
                 })}
               ></input>
               {errors.razonSocial?.type === 'required' && (
@@ -78,6 +80,7 @@ export default function AddUser({ onClose, onCloseSubmit }) {
                 type='text'
                 {...register('nit', {
                   required: true,
+                  value: searchBy === 'nit' ? search : '',
                 })}
               ></input>
               {errors.nit?.type === 'required' && (
@@ -95,6 +98,7 @@ export default function AddUser({ onClose, onCloseSubmit }) {
                   required: true,
                   pattern: /^[0-9]*$/,
                   maxLength: 10,
+                  value: searchBy === 'telefono' ? search : '',
                 })}
               ></input>
               {errors.telefono?.type === 'required' && (
@@ -122,6 +126,7 @@ export default function AddUser({ onClose, onCloseSubmit }) {
                   required: true,
                   pattern: /^[0-9]*$/,
                   maxLength: 4,
+                  value: searchBy === 'codigo' ? search : '',
                 })}
               ></input>
               {errors.codigo?.type === 'required' && (

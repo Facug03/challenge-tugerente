@@ -13,7 +13,7 @@ function App() {
     totalPages: 0,
     actualPage: 0,
     search: '',
-    searchBy: '',
+    searchBy: 'nombre',
   })
   const [error, setError] = useState('')
 
@@ -30,7 +30,7 @@ function App() {
         setLoading(false)
       })
   }, [])
-
+  console.log(page)
   const onCloseSubmit = () => {
     setModal(false)
     setUsers([])
@@ -63,7 +63,6 @@ function App() {
               ...page,
               actualPage: 0,
               totalPages: res.totalPages - 1,
-              searchBy: e.target[0].value,
             })
             setUsers(res.data)
             setError('')
@@ -106,7 +105,10 @@ function App() {
             onSubmit={handleSubmit}
             className='flex items-center justify-center h-9'
           >
-            <select className='w-[120px] font-lexendBold h-full rounded-l-2xl bg-red-500 text-white text-base cursor-pointer text-center'>
+            <select
+              onChange={(e) => setPage({ ...page, searchBy: e.target.value })}
+              className='w-[120px] font-lexendBold h-full rounded-l-2xl bg-red-500 text-white text-base cursor-pointer text-center'
+            >
               <option value='nombre'>Nombre</option>
               <option value='razonSocial'>Razon social</option>
               <option value='nit'>Nit</option>
@@ -141,6 +143,8 @@ function App() {
           modal={modal}
           onCloseSubmit={onCloseSubmit}
           onClose={() => setModal(false)}
+          search={page.search}
+          searchBy={page.searchBy}
         />
       )}
     </div>
