@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { getUsers } from './services/api'
 
+import Nav from './components/Nav'
 import AddUser from './components/AddUser'
-import Search from './components/icons/Search'
 import ListUsers from './components/ListUsers'
 
 function App() {
@@ -30,10 +30,9 @@ function App() {
         setLoading(false)
       })
   }, [])
-  console.log(page)
+
   const onCloseSubmit = () => {
     setModal(false)
-    setUsers([])
     setLoading(true)
     getUsers(0)
       .then((res) => {
@@ -55,6 +54,8 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (page.search) {
+      setUsers([])
+      setError('')
       setLoading(true)
       getUsers(0, page.search, e.target[0].value)
         .then((res) => {
@@ -96,39 +97,12 @@ function App() {
 
   return (
     <div className='text-center px-16'>
-      <header className='mb-8'>
-        <nav>
-          <h1 className='my-5 text-3xl font-lexendBold text-red-500'>
-            Administración de usuarios
-          </h1>
-          <form
-            onSubmit={handleSubmit}
-            className='flex items-center justify-center h-9'
-          >
-            <select
-              onChange={(e) => setPage({ ...page, searchBy: e.target.value })}
-              className='w-[120px] font-lexendBold h-full rounded-l-2xl bg-red-500 text-white text-base cursor-pointer text-center'
-            >
-              <option value='nombre'>Nombre</option>
-              <option value='razonSocial'>Razon social</option>
-              <option value='nit'>Nit</option>
-              <option value='telefono'>Telefono</option>
-              <option value='codigo'>Codigo</option>
-            </select>
-            <input
-              className='h-full border-2 border-red-500 outline-none px-1 border-l-0 w-60'
-              type='text'
-              placeholder='Buscar...'
-              name='search'
-              value={page.search}
-              onChange={(e) => setPage({ ...page, search: e.target.value })}
-            />
-            <button className='px-3 h-full border-2 border-red-500 border-l-0 rounded-r-2xl'>
-              <Search width={20} height={20} />
-            </button>
-          </form>
-        </nav>
-      </header>
+      <Nav
+        handleSubmit={handleSubmit}
+        handleChange={(value) => setPage({ ...page, searchBy: value })}
+        handleSearch={(value) => setPage({ ...page, search: value })}
+        page={page}
+      />
       <ListUsers
         users={users}
         changeModal={() => setModal(true)}
