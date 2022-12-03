@@ -11,13 +11,13 @@ _Tener Docker Desktop instalado_
 _Primer paso_
 
 ```
-Npm install 
+Correr comando: npm install 
 ```
 
 _Segundo paso_
 
 ```
-docker compose up
+Correr comando: docker compose up
 ```
 
 ## Ejecutando las pruebas ⚙️
