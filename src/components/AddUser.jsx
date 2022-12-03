@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form'
 import { createUser } from '../services/api'
 import Loader from './icons/Loader'
 
-export default function AddUser({ onClose, modal, onCloseSubmit }) {
+export default function AddUser({ onClose, onCloseSubmit }) {
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const {
     register,
     formState: { errors },
@@ -15,139 +16,151 @@ export default function AddUser({ onClose, modal, onCloseSubmit }) {
 
   const onSubmit = (data) => {
     setLoading(true)
-    createUser(data).then(() => {
-      setLoading(false)
-      onCloseSubmit()
-      reset()
-    })
+    createUser(data)
+      .then(() => {
+        onCloseSubmit()
+        reset()
+      })
+      .catch(() => {
+        setError('Ha ocurrido un error')
+      })
+      .finally(() => setLoading(false))
   }
 
   return (
-    <>
-      {modal && (
-        <div className='w-screen h-screen fixed top-0 left-0 bg-black/50 flex items-center justify-center z-50'>
-          <div className=' bg-white relative border-2 border-slate-700 p-5 rounded-md w-80'>
-            <button onClick={onClose} className='absolute top-0 right-[6px]'>
-              X
+    <div className='w-screen h-screen fixed top-0 left-0 bg-black/50 flex items-center justify-center z-50'>
+      {!error ? (
+        <div className=' bg-white relative border-2 border-slate-700 p-5 rounded-md w-80'>
+          <button onClick={onClose} className='absolute top-0 right-[6px]'>
+            X
+          </button>
+          <h2 className='text-2xl mb-2 font-lexendBold text-red-500'>
+            Añadir usuario
+          </h2>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className='flex gap-3 flex-col items-start'
+          >
+            <div className='relative w-full'>
+              <label className='block mb-2'>Nombre</label>
+              <input
+                className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
+                type='text'
+                {...register('nombre', {
+                  required: true,
+                })}
+              ></input>
+              {errors.nombre?.type === 'required' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Obligatorio
+                </p>
+              )}
+            </div>
+            <div className='relative w-full'>
+              <label className='block mb-2'>Razón social</label>
+              <input
+                className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
+                type='text'
+                {...register('razonSocial', {
+                  required: true,
+                })}
+              ></input>
+              {errors.razonSocial?.type === 'required' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Obligatorio
+                </p>
+              )}
+            </div>
+            <div className='relative w-full'>
+              <label className='block mb-2'>Nit</label>
+              <input
+                className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
+                type='text'
+                {...register('nit', {
+                  required: true,
+                })}
+              ></input>
+              {errors.nit?.type === 'required' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Obligatorio
+                </p>
+              )}
+            </div>
+            <div className='relative w-full'>
+              <label className='block mb-2'>Teléfono</label>
+              <input
+                className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
+                type='text'
+                {...register('telefono', {
+                  required: true,
+                  pattern: /^[0-9]*$/,
+                  maxLength: 10,
+                })}
+              ></input>
+              {errors.telefono?.type === 'required' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Obligatorio
+                </p>
+              )}
+              {errors.telefono?.type === 'pattern' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Solo números
+                </p>
+              )}
+              {errors.telefono?.type === 'maxLength' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Maximo 10 números
+                </p>
+              )}
+            </div>
+            <div className='relative w-full'>
+              <label className='block mb-2'>Código</label>
+              <input
+                className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
+                type='text'
+                {...register('codigo', {
+                  required: true,
+                  pattern: /^[0-9]*$/,
+                  maxLength: 4,
+                })}
+              ></input>
+              {errors.codigo?.type === 'required' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Obligatorio
+                </p>
+              )}
+              {errors.codigo?.type === 'pattern' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Solo números
+                </p>
+              )}
+              {errors.codigo?.type === 'maxLength' && (
+                <p className='absolute left-[23px] text-xs text-red-700'>
+                  Maximo 4 números
+                </p>
+              )}
+            </div>
+            <button className='mx-auto mt-2 bg-red-500 py-2 w-[83px] text-white rounded-md hover:bg-red-400 duration-200 ease-linear'>
+              {loading ? (
+                <Loader h='h-6' w='w-6' color='fill-white' />
+              ) : (
+                'Añadir'
+              )}
             </button>
-            <h2 className='text-2xl mb-2 font-lexendBold text-red-500'>
-              Añadir usuario
-            </h2>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className='flex gap-3 flex-col items-start'
-            >
-              <div className='relative w-full'>
-                <label className='block mb-2'>Nombre</label>
-                <input
-                  className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
-                  type='text'
-                  {...register('nombre', {
-                    required: true,
-                  })}
-                ></input>
-                {errors.nombre?.type === 'required' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Obligatorio
-                  </p>
-                )}
-              </div>
-              <div className='relative w-full'>
-                <label className='block mb-2'>Razón social</label>
-                <input
-                  className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
-                  type='text'
-                  {...register('razonSocial', {
-                    required: true,
-                  })}
-                ></input>
-                {errors.razonSocial?.type === 'required' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Obligatorio
-                  </p>
-                )}
-              </div>
-              <div className='relative w-full'>
-                <label className='block mb-2'>Nit</label>
-                <input
-                  className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
-                  type='text'
-                  {...register('nit', {
-                    required: true,
-                  })}
-                ></input>
-                {errors.nit?.type === 'required' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Obligatorio
-                  </p>
-                )}
-              </div>
-              <div className='relative w-full'>
-                <label className='block mb-2'>Teléfono</label>
-                <input
-                  className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
-                  type='text'
-                  {...register('telefono', {
-                    required: true,
-                    pattern: /^[0-9]*$/,
-                    maxLength: 10,
-                  })}
-                ></input>
-                {errors.telefono?.type === 'required' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Obligatorio
-                  </p>
-                )}
-                {errors.telefono?.type === 'pattern' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Solo números
-                  </p>
-                )}
-                {errors.telefono?.type === 'maxLength' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Maximo 10 números
-                  </p>
-                )}
-              </div>
-              <div className='relative w-full'>
-                <label className='block mb-2'>Código</label>
-                <input
-                  className='mx-auto border-slate-700 px-2 py-1 border rounded-md outline-none'
-                  type='text'
-                  {...register('codigo', {
-                    required: true,
-                    pattern: /^[0-9]*$/,
-                    maxLength: 4,
-                  })}
-                ></input>
-                {errors.codigo?.type === 'required' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Obligatorio
-                  </p>
-                )}
-                {errors.codigo?.type === 'pattern' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Solo números
-                  </p>
-                )}
-                {errors.codigo?.type === 'maxLength' && (
-                  <p className='absolute left-[23px] text-xs text-red-700'>
-                    Maximo 4 números
-                  </p>
-                )}
-              </div>
-              <button className='mx-auto mt-2 bg-red-500 py-2 w-[83px] text-white rounded-md hover:bg-red-400 duration-200 ease-linear'>
-                {loading ? (
-                  <Loader h='h-6' w='w-6' color='fill-white' />
-                ) : (
-                  'Añadir'
-                )}
-              </button>
-            </form>
-          </div>
+          </form>
+        </div>
+      ) : (
+        <div className=' bg-white relative border-2 border-slate-700 p-5 rounded-md py-8'>
+          <h3 className='text-xl mb-3'>{error}</h3>
+          <button
+            onClick={onCloseSubmit}
+            className='px-5 py-1 bg-red-500 rounded-2xl mr-2 text-white'
+          >
+            Aceptar
+          </button>
         </div>
       )}
-    </>
+    </div>
   )
 }
 

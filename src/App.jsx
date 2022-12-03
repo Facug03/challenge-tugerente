@@ -136,11 +136,13 @@ function App() {
         onCloseSubmit={onCloseSubmit}
         error={error}
       />
-      <AddUser
-        modal={modal}
-        onCloseSubmit={onCloseSubmit}
-        onClose={() => setModal(false)}
-      />
+      {modal && (
+        <AddUser
+          modal={modal}
+          onCloseSubmit={onCloseSubmit}
+          onClose={() => setModal(false)}
+        />
+      )}
     </div>
   )
 }
